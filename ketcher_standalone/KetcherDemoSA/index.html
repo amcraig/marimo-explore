@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ketcher (local, bridged)</title>
+    <link href="/KetcherDemoSA/static/css/main.bdf7ea17.css" rel="stylesheet" />
+    <style>
+      html, body, #root { height: 100%; margin: 0; }
+      #root { width: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="/KetcherDemoSA/static/js/main.84e07ea6.js"></script>
+    <script>
+      // postMessage bridge: mirror the drawn structure's SMILES to the parent window.
+      (function () {
+        var lastSmiles = null;
+        function post(smiles) {
+          if (smiles === lastSmiles) return;
+          lastSmiles = smiles;
+          try { parent.postMessage({ type: "ketcher-smiles", smiles: smiles }, "*"); } catch (e) {}
+        }
+        async function readAndPost() {
+          try {
+            var k = window.ketcher;
+            if (!k) return;
+            var smiles = "";
+            try { smiles = await k.getSmiles(); } catch (e) { smiles = ""; }
+            post(smiles || "");
+          } catch (e) {}
+        }
+        // allow the parent to seed / overwrite the structure
+        window.addEventListener("message", function (ev) {
+          var d = ev.data || {};
+          if (d.type === "ketcher-set" && window.ketcher && typeof d.smiles === "string") {
+            try { window.ketcher.setMolecule(d.smiles); } catch (e) {}
+          }
+        });
+        var iv = setInterval(function () {
+          var k = window.ketcher;
+          if (!k || !k.editor || typeof k.editor.subscribe !== "function") return;
+          clearInterval(iv);
+          try { k.editor.subscribe("change", readAndPost); } catch (e) {}
+          // also poll as a safety net (some ops don't emit 'change' reliably)
+          setInterval(readAndPost, 500);
+          readAndPost();
+          parent.postMessage({ type: "ketcher-ready" }, "*");
+        }, 150);
+      })();
+    </script>
+  </body>
+</html>

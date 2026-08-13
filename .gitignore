@@ -1,0 +1,19 @@
+# marimo session cache (regenerated on run)
+__marimo__/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.ipynb_checkpoints/
+
+# uv
+.uv/
+
+# Claude Code / agent tooling — users install marimo-pair themselves (see README)
+.claude/
+.agents/
+skills-lock.json
+
+# OS
+.DS_Store
