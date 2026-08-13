@@ -29,17 +29,14 @@ isolated environment per notebook on demand.
 
 ## Notebooks
 
-| Notebook | What it shows | Run |
+| Notebook | What it shows | Edit / Run |
 |---|---|---|
-| `explore_marimo.py` | marimo 101 — reactivity (dataflow DAG), `mo.ui` sliders/dropdowns, live-updating Altair charts and tables. Default notebook view. | `uvx marimo run explore_marimo.py` |
-| `slideshow.py` | A four-step slide deck: DuckDB globbing many Parquet files as one table (with a `by_family` ↔ `shuffled` source toggle), interactive data exploration, static charts, and the same chart driven by live widgets. Slides layout. | `uvx marimo run slideshow.py` |
-| `similarity_search.py` | Molecular **similarity-search dashboard**: sketch a molecule in embedded **Ketcher** → SMILES → ECFP4 **Tanimoto** ranking over Parquet (via the `ducksmiles` DuckDB extension) → interactive scatter (cLogP vs MW) with RDKit structure images on hover. Grid layout. | `uvx marimo run similarity_search.py` |
+| `explore_marimo.py` | marimo 101 — reactivity (dataflow DAG), `mo.ui` sliders/dropdowns, live-updating Altair charts and tables. Default notebook view. | `uvx marimo {edit/run} explore_marimo.py` |
+| `slideshow.py` | A four-step slide deck: DuckDB globbing many Parquet files as one table (with a `by_family` ↔ `shuffled` source toggle), interactive data exploration, static charts, and the same chart driven by live widgets. Slides layout. | `uvx marimo {edit/run} slideshow.py` |
+| `similarity_search.py` | Molecular **similarity-search dashboard**: sketch a molecule in embedded **Ketcher** → SMILES → ECFP4 **Tanimoto** ranking over Parquet (via the `ducksmiles` DuckDB extension) → interactive scatter (cLogP vs MW) with RDKit structure images on hover. Grid layout. | `uvx marimo {edit/run} similarity_search.py` |
 
-Swap `run` for `edit` to open any notebook in the editor:
-
-```bash
-uvx marimo edit similarity_search.py
-```
+`{edit/run}` is a placeholder — pick one: **`edit`** opens the notebook in the
+reactive editor, **`run`** serves it as a read-only app.
 
 ## Data
 
@@ -106,12 +103,8 @@ Node.js):
 npx skills add marimo-team/marimo-pair
 ```
 
-Then start a notebook so it registers for discovery, keep it open in a browser,
-and ask your agent to pair:
-
-```bash
-uvx marimo edit --no-token similarity_search.py -p 2719
-```
+Then `edit` a notebook (see the table above) so it registers for discovery, keep
+it open in a browser, and ask your agent to pair:
 
 ```
 /marimo-pair pair with me on similarity_search.py
